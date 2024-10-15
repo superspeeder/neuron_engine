@@ -14,9 +14,9 @@ namespace neuron {
     }
 
     void Platform::init() {
-#if defined(__APPLE__) && defined(__MACH__)
+#if defined(__APPLE__)
         detail::platform = detail::create_macos_platform();
-#elif defined(__linux__) || defined(__unix__)
+#elif defined(__LINUX__)
         detail::platform = detail::create_linux_platform();
 #elif defined(WIN32) || defined(_WIN32)
         detail::platform = detail::create_win32_platform();

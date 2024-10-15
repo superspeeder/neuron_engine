@@ -45,7 +45,7 @@ if(APPLE)
             src/neuron/platform/macos.mm
             src/neuron/platform/cocoas.mm
     )
-elseif(UNIX)
+elseif(LINUX)
     list(APPEND PLATFORM_SRCS
             src/neuron/platform/linux.cpp
     )

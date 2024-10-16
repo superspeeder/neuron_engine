@@ -1,5 +1,7 @@
 #include "generic.hpp"
 
+#include <neuron/stem/stem.hpp>
+
 namespace neuron::synapse {
     namespace detail {
         std::unique_ptr<Platform> platform;
@@ -23,6 +25,8 @@ namespace neuron::synapse {
 #else
 #error "Unsupported System"
 #endif
+
+        stem::set_active_platform(detail::platform.get());
     }
 
     void Platform::cleanup() {

@@ -1,6 +1,11 @@
+#define VK_USE_PLATFORM_WIN32_KHR
+#include <vulkan/vulkan.hpp>
+
 #include "win32.hpp"
 #include <stdexcept>
 #ifdef WIN32
+#include <windowsx.h>
+
 
 #ifdef SYNAPSE_SHARED
 HINSTANCE hInst_;
@@ -389,6 +394,14 @@ namespace neuron::synapse {
         m_window_map.erase(hwnd);
     }
 
+
+#ifdef SYNAPSE_VULKAN_SUPPORT
+    const std::vector<const char *> &Win32Platform::required_instance_extensions() {
+        static std::vector<const char*> REQUIRED_EXTS = {VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
+        return REQUIRED_EXTS;
+    }
+#endif
+
     LRESULT Win32Platform::_window_proc(HWND hwnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam) {
         if (hwnd) {
             LONG_PTR lp = GetWindowLongPtrA(hwnd, GWLP_USERDATA);
@@ -485,6 +498,7 @@ namespace neuron::synapse {
         m_hwnd = CreateWindowExA(ex_style, detail::CLASSNAME, description.title.c_str(), style, x, y, description.size.x, description.size.y, nullptr, nullptr,
                                  _get_platform()->hinstance(), this);
         ShowWindow(m_hwnd, SW_NORMAL);
+        m_last_cursor_pos = get_cursor_pos();
     }
 
     Win32Window::~Win32Window() {
@@ -499,6 +513,54 @@ namespace neuron::synapse {
 
     void Win32Window::trigger_close() {
         SendMessageA(m_hwnd, WM_CLOSE, 0, 0);
+    }
+
+    glm::ivec2 Win32Window::get_cursor_pos() const {
+        POINT p;
+        GetCursorPos(&p);
+        return {p.x, p.y};
+    }
+
+
+    vk::SurfaceKHR Win32Window::create_vulkan_surface(const vk::Instance instance, const vk::AllocationCallbacks *allocator) {
+        const auto vkCreateWin32SurfaceKHR = reinterpret_cast<PFN_vkCreateWin32SurfaceKHR>(instance.getProcAddr("vkCreateWin32SurfaceKHR", vk::getDispatchLoaderStatic()));
+        VkSurfaceKHR surface;
+        VkWin32SurfaceCreateInfoKHR createInfo{};
+        createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+        createInfo.pNext = nullptr;
+        createInfo.hinstance = _get_platform()->hinstance();
+        createInfo.hwnd = m_hwnd;
+        createInfo.flags = 0;
+        vkCreateWin32SurfaceKHR(instance, &createInfo, &static_cast<const VkAllocationCallbacks&>(*allocator), &surface);
+        return surface;
+    }
+
+    KeyMods _getmods() {
+        KeyMods mods{};
+        if (GetKeyState(VK_SHIFT) & 0x8000) {
+            mods.shift = true;
+        }
+
+        if (GetKeyState(VK_CONTROL) & 0x8000) {
+            mods.control = true;
+        }
+
+        if (GetKeyState(VK_MENU) & 0x8000) {
+            mods.alt = true;
+        }
+
+        if (GetKeyState(VK_LWIN) & 0x8000 || GetKeyState(VK_RWIN) & 0x8000) {
+            mods.super = true;
+        }
+
+        if (GetKeyState(VK_CAPITAL) & 0x0001) {
+            mods.caps_lock = true;
+        }
+
+        if (GetKeyState(VK_NUMLOCK) & 0x0001) {
+            mods.num_lock = true;
+        }
+        return mods;
     }
 
     LRESULT Win32Window::handle_event(const UINT msg, const WPARAM w_param, const LPARAM l_param) {
@@ -519,32 +581,10 @@ namespace neuron::synapse {
         case WM_KEYUP:
         case WM_SYSKEYDOWN:
         case WM_SYSKEYUP: {
-            detail::keyinfo ki = detail::_parsekeyinfo(w_param, l_param);
-            KeyCode         kc = detail::_trvkc(ki.vkc);
-            KeyMods         mods{};
-            if (msg == WM_SYSKEYDOWN || msg == WM_SYSKEYUP) {
-                mods.alt = true;
-            }
-
-            if (GetKeyState(VK_SHIFT) & 0x8000) {
-                mods.shift = true;
-            }
-
-            if (GetKeyState(VK_CONTROL) & 0x8000) {
-                mods.control = true;
-            }
-
-            if (GetKeyState(VK_LWIN) & 0x8000 || GetKeyState(VK_RWIN) & 0x8000) {
-                mods.super = true;
-            }
-
-            if (GetKeyState(VK_CAPITAL) & 0x0001) {
-                mods.caps_lock = true;
-            }
-
-            if (GetKeyState(VK_NUMLOCK) & 0x0001) {
-                mods.num_lock = true;
-            }
+            detail::keyinfo ki   = detail::_parsekeyinfo(w_param, l_param);
+            KeyCode         kc   = detail::_trvkc(ki.vkc);
+            KeyMods         mods = _getmods();
+            mods.alt             = msg == WM_SYSKEYDOWN || msg == WM_SYSKEYUP;
 
             if (ki.is_released) {
                 call_key_released_callback(kc, mods, ki.scancode);
@@ -553,11 +593,66 @@ namespace neuron::synapse {
             }
         } break;
         case WM_SIZE: {
-            WORD w = LOWORD(l_param);
-            WORD h = HIWORD(l_param);
+            const WORD w = LOWORD(l_param);
+            const WORD h = HIWORD(l_param);
             call_resize_callback(glm::uvec2(w, h));
+        } break;
+        case WM_MOUSEMOVE: {
+            const auto p = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            call_mouse_moved_callback(m_last_cursor_pos, p, p - m_last_cursor_pos);
+            m_last_cursor_pos = p;
+        } break;
+        case WM_LBUTTONDOWN: {
+            const auto    p    = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            const KeyMods mods = _getmods();
+            call_mouse_button_down_callback(MouseButton::Left, p, mods);
+        } break;
+        case WM_MBUTTONDOWN: {
+            const auto    p    = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            const KeyMods mods = _getmods();
+            call_mouse_button_down_callback(MouseButton::Middle, p, mods);
+        } break;
+        case WM_RBUTTONDOWN: {
+            const auto    p    = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            const KeyMods mods = _getmods();
+            call_mouse_button_down_callback(MouseButton::Right, p, mods);
+        } break;
+        case WM_XBUTTONDOWN: {
+            const auto    p    = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            const KeyMods mods = _getmods();
+            if (HIWORD(w_param) == XBUTTON1) {
+                call_mouse_button_down_callback(MouseButton::Button4, p, mods);
+            } else {
+                call_mouse_button_down_callback(MouseButton::Button5, p, mods);
+            }
+        } break;
+        case WM_LBUTTONUP: {
+            const auto p = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            call_mouse_button_up_callback(MouseButton::Left, p);
+        } break;
+        case WM_MBUTTONUP: {
+            const auto p = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            call_mouse_button_up_callback(MouseButton::Middle, p);
+        } break;
+        case WM_RBUTTONUP: {
+            const auto p = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+            call_mouse_button_up_callback(MouseButton::Right, p);
+        } break;
+        case WM_XBUTTONUP: {
+            const auto p = glm::ivec2{GET_X_LPARAM(l_param), GET_Y_LPARAM(l_param)};
+
+            if (HIWORD(w_param) == XBUTTON1) {
+                call_mouse_button_up_callback(MouseButton::Button4, p);
+            } else {
+                call_mouse_button_up_callback(MouseButton::Button5, p);
+            }
+        } break;
+        case WM_MOUSELEAVE: {
+            call_mouse_leave_callback();
+        } break;
+        // case WM_MOUSEHOVER: {} // TODO: understand how this works
         }
-        }
+
         return DefWindowProcA(m_hwnd, msg, w_param, l_param);
     }
 } // namespace neuron::synapse

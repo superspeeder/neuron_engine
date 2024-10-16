@@ -1,8 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <variant>
 
-namespace neuron {
+namespace neuron::stem {
 
     namespace detail {
         // Copied from https://stackoverflow.com/questions/52303316/get-index-by-type-in-stdvariant
@@ -22,4 +23,6 @@ namespace neuron {
     template<typename VariantType, typename T>
     constexpr std::size_t variant_index = detail::_variant_index<VariantType, T>();
 
+    template<typename T>
+    struct blank_typed{};
 }

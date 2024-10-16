@@ -1,7 +1,9 @@
 #pragma once
 
 #include "neuron/synapse/pre.hpp"
-#include "neuron/stem/utils.hpp"
+
+#include <neuron/stem/stem.hpp>
+#include <neuron/stem/utils.hpp>
 
 #include <functional>
 #include <memory>
@@ -10,6 +12,14 @@
 #include <variant>
 
 #include <glm/glm.hpp>
+
+#ifdef SYNAPSE_VULKAN_SUPPORT
+#if __has_include(<vulkan/vulkan.hpp>)
+#include <vulkan/vulkan.hpp>
+#else
+#error "Cannot compile with vulkan support without the <vulkan/vulkan.hpp> header"
+#endif
+#endif
 
 
 #define CALLBACKF(N, ...)                                                                                                                                                          \
@@ -189,6 +199,14 @@ namespace neuron::synapse {
         bool num_lock  : 1;
     };
 
+    enum class MouseButton {
+        Left,
+        Right,
+        Middle,
+        Button4,
+        Button5,
+    };
+
     enum class GenericSpecialKey : uint8_t {};
 
     struct WindowFixedPosition {
@@ -207,10 +225,10 @@ namespace neuron::synapse {
     constexpr auto WINDOW_PLACEMENT_CENTER_HOVERED_MONITOR = WindowCenterHoveredMonitor{};
 
     enum class WindowPlacementMethod : size_t {
-        USE_DEFAULT            = variant_index<WindowPlacement, std::monostate>,
-        FIXED_POSITION         = variant_index<WindowPlacement, WindowFixedPosition>,
-        CENTER_MONITOR         = variant_index<WindowPlacement, WindowCenterMonitor>,
-        CENTER_HOVERED_MONITOR = variant_index<WindowPlacement, WindowCenterHoveredMonitor>,
+        USE_DEFAULT            = stem::variant_index<WindowPlacement, std::monostate>,
+        FIXED_POSITION         = stem::variant_index<WindowPlacement, WindowFixedPosition>,
+        CENTER_MONITOR         = stem::variant_index<WindowPlacement, WindowCenterMonitor>,
+        CENTER_HOVERED_MONITOR = stem::variant_index<WindowPlacement, WindowCenterHoveredMonitor>,
     };
 
     struct WindowDescription {
@@ -221,7 +239,7 @@ namespace neuron::synapse {
         bool resizable;
     };
 
-    class SYNAPSE_API Platform {
+    class SYNAPSE_API Platform : public stem::PlatformGenerics {
       public:
         virtual ~Platform() = default;
 
@@ -235,6 +253,10 @@ namespace neuron::synapse {
 
         static void init();
         static void cleanup();
+
+#ifdef SYNAPSE_VULKAN_SUPPORT
+        virtual const std::vector<const char *> &required_instance_extensions() = 0;
+#endif
     };
 
     class SYNAPSE_API Window : public std::enable_shared_from_this<Window> {
@@ -257,20 +279,29 @@ namespace neuron::synapse {
 
         virtual void trigger_close() = 0;
 
+        virtual glm::ivec2 get_cursor_pos() const = 0;
+
+#ifdef SYNAPSE_VULKAN_SUPPORT
+        virtual vk::SurfaceKHR create_vulkan_surface(vk::Instance instance, const vk::AllocationCallbacks *allocator) = 0;
+#endif
+
         CALLBACKF(resize, const glm::uvec2 &new_size);
         CALLBACKF(close_request, bool *close);
         CALLBACKF(close);
         CALLBACKF(key_pressed, KeyCode keycode, const KeyMods &mods, unsigned int scancode, bool is_repeat);
         CALLBACKF(key_released, KeyCode keycode, const KeyMods &mods, unsigned int scancode);
-        CALLBACKF(button_pressed, unsigned int button, const glm::ivec2& pos, const KeyMods& mods);
-        CALLBACKF(button_released, unsigned int button, const glm::ivec2& pos, const KeyMods& mods);
-        CALLBACKF(mouse_moved, const glm::ivec2& old_position, const glm::ivec2& new_position, const glm::ivec2& delta);
-        CALLBACKF(character_typed, unsigned int unicode_codepoint); // needs to be long because keyboards and computers can generate characters which can't be represented by UTF-8 in a single byte.
+        CALLBACKF(button_pressed, unsigned int button, const glm::ivec2 &pos, const KeyMods &mods);
+        CALLBACKF(button_released, unsigned int button, const glm::ivec2 &pos, const KeyMods &mods);
+        CALLBACKF(mouse_moved, const glm::ivec2 &old_position, const glm::ivec2 &new_position, const glm::ivec2 &delta);
+        CALLBACKF(character_typed,
+                  unsigned int unicode_codepoint); // needs to be long because keyboards and computers can generate characters which can't be represented by UTF-8 in a single byte.
         CALLBACKF(mouse_enter);
         CALLBACKF(mouse_leave);
         CALLBACKF(focus);
         CALLBACKF(unfocus);
         CALLBACKF(scrolled, const glm::ivec2 &pos, const glm::ivec2 &scroll_delta);
+        CALLBACKF(mouse_button_down, const MouseButton &mouse_button, const glm::ivec2 &pos, const KeyMods &mods);
+        CALLBACKF(mouse_button_up, const MouseButton &mouse_button, const glm::ivec2 &pos);
     };
 
     inline constexpr bool is_key_ascii_compatible(const KeyCode &kc) {
@@ -313,6 +344,6 @@ namespace neuron::synapse {
     inline constexpr bool is_keycode_valid(const KeyCode &kc) {
         return kc == KeyCode::Invalid;
     };
-} // namespace neuron
+} // namespace neuron::synapse
 
 #undef CALLBACKF

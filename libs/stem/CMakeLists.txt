@@ -21,16 +21,20 @@ set(BUILD_SHARED_LIBS ${NEURON_SHARED_BUILD})
 
 add_library(neuron_stem src/neuron/stem/stem.cpp
         src/neuron/stem/stem.hpp
-        src/neuron/stem/pre.hpp)
+        src/neuron/stem/pre.hpp
+        src/neuron/stem/interfaces.hpp)
 target_include_directories(neuron_stem PUBLIC src/)
 target_link_libraries(neuron_stem PUBLIC glm::glm)
 target_compile_definitions(neuron_stem PUBLIC -DGLM_ENABLE_EXPERIMENTAL)
 target_compile_definitions(neuron_stem PUBLIC NEURON_STEM_VERSION="${neuron_stem_VERSION}" NEURON_STEM_VERSION_MAJOR=${neuron_stem_VERSION_MAJOR} NEURON_STEM_VERSION_MINOR=${neuron_stem_VERSION_MINOR} NEURON_STEM_VERSION_PATCH=${neuron_stem_VERSION_PATCH})
 
 if (BUILD_SHARED_LIBS)
-    target_compile_definitions(neuron_stem PUBLIC NEURON_STEM_SHARED)
-    target_compile_definitions(neuron_stem PRIVATE NEURON_STEM_SHARED_EXPORTS)
+    target_compile_definitions(neuron_stem PUBLIC -DNEURON_STEM_SHARED)
+    target_compile_definitions(neuron_stem PRIVATE -DNEURON_STEM_SHARED_EXPORTS)
 endif()
 
+if (WIN32)
+    target_compile_definitions(neuron_stem PUBLIC -DNOMINMAX) # fuck you windows why do you make min and max a macro
+endif()
 
 add_library(neuron::stem ALIAS neuron_stem)

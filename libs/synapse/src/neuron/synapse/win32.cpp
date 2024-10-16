@@ -507,8 +507,8 @@ namespace neuron::synapse {
             bool should_close = true;
             call_close_request_callback(&should_close);
             if (should_close) {
-                DestroyWindow(m_hwnd);
                 call_close_callback();
+                DestroyWindow(m_hwnd);
             }
         }
             return 0;

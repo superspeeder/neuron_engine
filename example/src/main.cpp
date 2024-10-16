@@ -16,6 +16,14 @@ void run() {
         .resizable = false,
     });
 
+    const auto window2 = synapse::Window::create(synapse::WindowDescription{
+    .title     = "Hello!",
+    .size      = {800, 600},
+    .placement = synapse::WindowCenterMonitor{0},
+    // .placement = synapse::WINDOW_PLACEMENT_USE_DEFAULT,
+    .resizable = false,
+});
+
     window.lock()->set_on_resize([](const glm::uvec2& new_size) {
         std::cout << "Size: " << new_size.x << ", " << new_size.y << std::endl;
     });

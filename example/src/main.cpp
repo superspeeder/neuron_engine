@@ -28,6 +28,10 @@ void run() {
         std::cout << "Size: " << new_size.x << ", " << new_size.y << std::endl;
     });
 
+    window2.lock()->set_on_close_request([window](bool* close) {
+        if (!window.expired()) *close = false;
+    });
+
     window.lock()->set_on_close([] {
         std::cout << "Close" << std::endl;
     });

@@ -170,7 +170,6 @@ namespace neuron::synapse {
         F22 = 0x0417,
         F23 = 0x0418,
         F24 = 0x0419,
-        F25 = 0x041A,
 
         // Generic Keys
         Shift   = 0x02C0,

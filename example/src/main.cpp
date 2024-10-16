@@ -11,8 +11,8 @@ void run() {
     const auto window = synapse::Window::create(synapse::WindowDescription{
         .title     = "Hello!",
         .size      = {800, 600},
-        // .placement = synapse::WindowCenterMonitor{0},
-        .placement = synapse::WINDOW_PLACEMENT_USE_DEFAULT,
+        .placement = synapse::WindowCenterMonitor{1},
+        // .placement = synapse::WINDOW_PLACEMENT_USE_DEFAULT,
         .resizable = false,
     });
 
@@ -29,7 +29,7 @@ void run() {
     });
 
     window.lock()->set_on_key_released([window](const synapse::KeyCode keycode, const synapse::KeyMods& mods, const unsigned int scancode) {
-        if (keycode == synapse::KeyCode::Escape && mods.control) {
+        if (keycode == synapse::KeyCode::Escape && mods.shift) {
             window.lock()->trigger_close();
         }
     });

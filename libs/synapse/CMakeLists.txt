@@ -11,7 +11,9 @@ add_library(neuron_synapse src/neuron/synapse/generic.cpp src/neuron/synapse/gen
         src/neuron/synapse/win32.cpp src/neuron/synapse/win32.hpp
         src/neuron/synapse/x11.cpp src/neuron/synapse/x11.hpp
         src/neuron/synapse/cocoas.cpp src/neuron/synapse/cocoas.hpp
-        src/neuron/synapse/macos.cpp src/neuron/synapse/macos.hpp)
+        src/neuron/synapse/macos.cpp src/neuron/synapse/macos.hpp
+        src/neuron/synapse/synapse.cpp
+        src/neuron/synapse/synapse.hpp)
 
 if (APPLE)
     target_sources(neuron_synapse PUBLIC src/neuron/synapse/cocoas.mm src/neuron/synapse/macos.mm)

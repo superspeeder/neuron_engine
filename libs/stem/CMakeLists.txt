@@ -8,18 +8,20 @@ include(FetchContent)
 
 # glm must be built as a static library.
 set(NEURON_SHARED_BUILD ${BUILD_SHARED_LIBS})
-set(BUILD_SHARED_LIBS 0)
+set(BUILD_SHARED_LIBS OFF)
 
 FetchContent_Declare(
     glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
     GIT_TAG        1.0.1
 )
-set(BUILD_SHARED_LIBS ${NEURON_SHARED_BUILD})
 
 FetchContent_MakeAvailable(glm)
+set(BUILD_SHARED_LIBS ${NEURON_SHARED_BUILD})
 
-add_library(neuron_stem src/neuron/stem/stem.cpp)
+add_library(neuron_stem src/neuron/stem/stem.cpp
+        src/neuron/stem/stem.hpp
+        src/neuron/stem/pre.hpp)
 target_include_directories(neuron_stem PUBLIC src/)
 target_link_libraries(neuron_stem PUBLIC glm::glm)
 target_compile_definitions(neuron_stem PUBLIC -DGLM_ENABLE_EXPERIMENTAL)

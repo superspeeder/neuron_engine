@@ -25,12 +25,16 @@ namespace neuron::synapse {
 
         [[nodiscard]] inline HINSTANCE hinstance() const { return m_hinstance; };
 
+        void remove_window(HWND hwnd);
+
       private:
         friend class Win32Window;
         HINSTANCE m_hinstance;
 
         std::unordered_set<HWND>                               m_open_windows;
         std::unordered_map<HWND, std::shared_ptr<Win32Window>> m_window_map;
+
+        static LRESULT CALLBACK _window_proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     };
 
     class SYNAPSE_API Win32Window final : public Window {
@@ -38,12 +42,14 @@ namespace neuron::synapse {
         explicit Win32Window(const WindowDescription &description);
 
       public:
-        ~Win32Window() override = default;
+        ~Win32Window() override;
 
         glm::uvec2 get_inner_size() const override;
         void       trigger_close() override;
 
         [[nodiscard]] inline HWND win32_handle() const { return m_hwnd; };
+
+        LRESULT handle_event(UINT msg, WPARAM w_param, LPARAM l_param);
 
       private:
         HWND m_hwnd;

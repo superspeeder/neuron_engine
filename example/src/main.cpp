@@ -11,7 +11,8 @@ void run() {
     const auto window = synapse::Window::create(synapse::WindowDescription{
         .title     = "Hello!",
         .size      = {800, 600},
-        .placement = synapse::WindowCenterMonitor{0},
+        // .placement = synapse::WindowCenterMonitor{0},
+        .placement = synapse::WINDOW_PLACEMENT_USE_DEFAULT,
         .resizable = false,
     });
 

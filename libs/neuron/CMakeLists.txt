@@ -4,7 +4,8 @@ project(neuron VERSION 0.2.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-add_library(neuron src/neuron/neuron.cpp)
+add_library(neuron src/neuron/neuron.cpp
+        src/neuron/neuron.hpp)
 target_include_directories(neuron PUBLIC src/)
 target_link_libraries(neuron PUBLIC neuron::occipital neuron::stem neuron::synapse)
 target_compile_definitions(neuron PUBLIC NEURON_VERSION="${neuron_VERSION}" NEURON_VERSION_MAJOR=${neuron_VERSION_MAJOR} NEURON_VERSION_MINOR=${neuron_VERSION_MINOR} NEURON_VERSION_PATCH=${neuron_VERSION_PATCH})

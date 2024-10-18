@@ -24,8 +24,11 @@ void window_test(const std::shared_ptr<synapse::Window>& window) {
 #endif
 
 void run() {
-    std::shared_ptr<occipital::Occipital> occipital = occipital::Occipital::init(occipital::OccipitalSettings{});
-
+    std::shared_ptr<occipital::Occipital> occipital = occipital::Occipital::init(occipital::OccipitalSettings{
+        .validation = occipital::FeatureDependencyMode::IfAvailable,
+        .surfaceless_query = occipital::FeatureDependencyMode::IfAvailable,
+        .allow_non_conformant_devices = true,
+    });
 
     const auto window = synapse::Window::create(synapse::WindowDescription{
         .title     = "Hello!",
@@ -72,7 +75,7 @@ void run() {
     });
 
     window.lock()->set_on_mouse_moved([](const glm::ivec2 &old_position, const glm::ivec2 &new_position, const glm::ivec2 &delta) {
-        std::cout << "Mouse Moved: " << glm::to_string(old_position) << " -> " << glm::to_string(new_position) << " | " << glm::to_string(delta) << std::endl;
+        // std::cout << "Mouse Moved: " << glm::to_string(old_position) << " -> " << glm::to_string(new_position) << " | " << glm::to_string(delta) << std::endl;
     });
 
     using clock      = std::chrono::high_resolution_clock;

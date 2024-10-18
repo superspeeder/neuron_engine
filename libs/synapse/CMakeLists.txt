@@ -4,7 +4,16 @@ project(neuron_synapse VERSION 0.2.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-option(SYNAPSE_VULKAN_SUPPORT "Include Vulkan Support" ON)
+
+set(NEURON_SHARED_BUILD ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF)
+FetchContent_Declare(
+        VulkanHeaders
+        GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers
+        GIT_TAG        v1.3.298
+)
+FetchContent_MakeAvailable(VulkanHeaders)
+set(BUILD_SHARED_LIBS ${NEURON_SHARED_BUILD})
 
 add_library(neuron_synapse src/neuron/synapse/generic.cpp src/neuron/synapse/generic.hpp
         src/neuron/synapse/linux.cpp src/neuron/synapse/linux.hpp
@@ -22,14 +31,8 @@ if (APPLE)
 endif()
 
 target_include_directories(neuron_synapse PUBLIC src/)
-target_link_libraries(neuron_synapse PUBLIC neuron::stem)
+target_link_libraries(neuron_synapse PUBLIC neuron::stem Vulkan::Headers)
 target_compile_definitions(neuron_synapse PUBLIC SYNAPSE_VERSION="${neuron_synapse_VERSION}" SYNAPSE_VERSION_MAJOR=${neuron_synapse_VERSION_MAJOR} SYNAPSE_VERSION_MINOR=${neuron_synapse_VERSION_MINOR} SYNAPSE_VERSION_PATCH=${neuron_synapse_VERSION_PATCH})
-
-if (SYNAPSE_VULKAN_SUPPORT)
-    find_package(Vulkan REQUIRED)
-    target_link_libraries(neuron_synapse PUBLIC Vulkan::Vulkan)
-    target_compile_definitions(neuron_synapse PUBLIC -DSYNAPSE_VULKAN_SUPPORT)
-endif()
 
 if (BUILD_SHARED_LIBS)
     target_compile_definitions(neuron_synapse PUBLIC SYNAPSE_SHARED)

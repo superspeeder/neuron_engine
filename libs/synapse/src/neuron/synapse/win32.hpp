@@ -31,17 +31,9 @@ namespace neuron::synapse {
 
         void remove_window(HWND hwnd);
 
-#ifdef SYNAPSE_VULKAN_SUPPORT
-        const std::vector<const char *> &required_instance_extensions() override;
-#endif
+        std::vector<const char *> required_instance_extensions() override;
 
-        inline std::vector<const char *> vulkan_needed_instance_extensions() override {
-#ifdef SYNAPSE_VULKAN_SUPPORT
-            return required_instance_extensions();
-#else
-            return {};
-#endif
-        };
+        pfn_vkGetInstanceProcAddr get_vulkan_instance_loader() override;
 
       private:
         friend class Win32Window;
@@ -49,6 +41,8 @@ namespace neuron::synapse {
 
         std::unordered_set<HWND>                               m_open_windows;
         std::unordered_map<HWND, std::shared_ptr<Win32Window>> m_window_map;
+        pfn_vkGetInstanceProcAddr                              m_vulkan_loader;
+        HMODULE                                                m_vulkan_dll;
 
         static LRESULT CALLBACK _window_proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     };

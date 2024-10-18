@@ -253,13 +253,9 @@ namespace neuron::synapse {
 
         static void init();
         static void cleanup();
-
-#ifdef SYNAPSE_VULKAN_SUPPORT
-        virtual const std::vector<const char *> &required_instance_extensions() = 0;
-#endif
     };
 
-    class SYNAPSE_API Window : public std::enable_shared_from_this<Window> {
+    class SYNAPSE_API Window : public std::enable_shared_from_this<Window>, public stem::VulkanSurfaceCreator {
       protected:
         Window(/* TODO: does anything need to be here */);
 
@@ -281,9 +277,6 @@ namespace neuron::synapse {
 
         virtual glm::ivec2 get_cursor_pos() const = 0;
 
-#ifdef SYNAPSE_VULKAN_SUPPORT
-        virtual vk::SurfaceKHR create_vulkan_surface(vk::Instance instance, const vk::AllocationCallbacks *allocator) = 0;
-#endif
 
         CALLBACKF(resize, const glm::uvec2 &new_size);
         CALLBACKF(close_request, bool *close);

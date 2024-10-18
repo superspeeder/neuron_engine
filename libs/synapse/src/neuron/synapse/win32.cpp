@@ -349,10 +349,14 @@ namespace neuron::synapse {
         wc.hInstance     = m_hinstance;
         wc.lpszClassName = detail::CLASSNAME;
         RegisterClassExA(&wc);
+
+        m_vulkan_dll    = LoadLibraryA("vulkan-1.dll");
+        m_vulkan_loader = reinterpret_cast<pfn_vkGetInstanceProcAddr>(GetProcAddress(m_vulkan_dll, "vkGetInstanceProcAddr"));
     }
 
     Win32Platform::~Win32Platform() {
         UnregisterClassA(detail::CLASSNAME, m_hinstance);
+        FreeLibrary(m_vulkan_dll);
     }
 
     std::weak_ptr<Window> Win32Platform::create_window(const WindowDescription &description) {
@@ -394,13 +398,14 @@ namespace neuron::synapse {
         m_window_map.erase(hwnd);
     }
 
-
-#ifdef SYNAPSE_VULKAN_SUPPORT
-    const std::vector<const char *> &Win32Platform::required_instance_extensions() {
-        static std::vector<const char*> REQUIRED_EXTS = {VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
+    std::vector<const char *> Win32Platform::required_instance_extensions() {
+        static std::vector<const char *> REQUIRED_EXTS = {VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
         return REQUIRED_EXTS;
     }
-#endif
+
+    stem::PlatformGenerics::pfn_vkGetInstanceProcAddr Win32Platform::get_vulkan_instance_loader() {
+        return m_vulkan_loader;
+    }
 
     LRESULT Win32Platform::_window_proc(HWND hwnd, const UINT uMsg, const WPARAM wParam, const LPARAM lParam) {
         if (hwnd) {
@@ -521,17 +526,16 @@ namespace neuron::synapse {
         return {p.x, p.y};
     }
 
-
     vk::SurfaceKHR Win32Window::create_vulkan_surface(const vk::Instance instance, const vk::AllocationCallbacks *allocator) {
-        const auto vkCreateWin32SurfaceKHR = reinterpret_cast<PFN_vkCreateWin32SurfaceKHR>(instance.getProcAddr("vkCreateWin32SurfaceKHR", vk::getDispatchLoaderStatic()));
-        VkSurfaceKHR surface;
+        const auto                  vkCreateWin32SurfaceKHR = reinterpret_cast<PFN_vkCreateWin32SurfaceKHR>(_get_platform()->m_vulkan_loader(instance, "vkCreateWin32SurfaceKHR"));
+        VkSurfaceKHR                surface;
         VkWin32SurfaceCreateInfoKHR createInfo{};
-        createInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-        createInfo.pNext = nullptr;
+        createInfo.sType     = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
+        createInfo.pNext     = nullptr;
         createInfo.hinstance = _get_platform()->hinstance();
-        createInfo.hwnd = m_hwnd;
-        createInfo.flags = 0;
-        vkCreateWin32SurfaceKHR(instance, &createInfo, &static_cast<const VkAllocationCallbacks&>(*allocator), &surface);
+        createInfo.hwnd      = m_hwnd;
+        createInfo.flags     = 0;
+        vkCreateWin32SurfaceKHR(instance, &createInfo, &static_cast<const VkAllocationCallbacks &>(*allocator), &surface);
         return surface;
     }
 
@@ -650,7 +654,7 @@ namespace neuron::synapse {
         case WM_MOUSELEAVE: {
             call_mouse_leave_callback();
         } break;
-        // case WM_MOUSEHOVER: {} // TODO: understand how this works
+            // case WM_MOUSEHOVER: {} // TODO: understand how this works
         }
 
         return DefWindowProcA(m_hwnd, msg, w_param, l_param);

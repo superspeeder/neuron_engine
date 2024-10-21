@@ -185,3 +185,5 @@ example/CMakeFiles*
 example/example
 _deps
 .vscode/
+
+run.ps1

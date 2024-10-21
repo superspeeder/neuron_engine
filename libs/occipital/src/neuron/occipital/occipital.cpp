@@ -262,11 +262,11 @@ namespace neuron::occipital {
             throw std::runtime_error("Not all required features are available");
         }
 
-        HostFeatureAvailability host_feature_availability{.v3 = app_info.apiVersion == vk::ApiVersion13};
+        m_feature_availability{.v3 = app_info.apiVersion == vk::ApiVersion13};
 
         if (enable_direct_display_rendering) {
             extensions.push_back(VK_EXT_DIRECT_MODE_DISPLAY_EXTENSION_NAME);
-            host_feature_availability.direct_display_rendering = true;
+            m_feature_availability.direct_display_rendering = true;
         }
 
         vk::DebugUtilsMessengerCreateInfoEXT messenger_create_info;
@@ -274,7 +274,7 @@ namespace neuron::occipital {
         if (enable_validation) {
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
             layers.push_back("VK_LAYER_KHRONOS_validation");
-            host_feature_availability.validation  = true;
+            m_feature_availability.validation  = true;
             messenger_create_info.messageSeverity = vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose | vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo |
                 vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning | vk::DebugUtilsMessageSeverityFlagBitsEXT::eError;
             messenger_create_info.messageType = vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral | vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
@@ -290,22 +290,22 @@ namespace neuron::occipital {
 
         if (enable_headless_surface) {
             extensions.push_back(VK_EXT_HEADLESS_SURFACE_EXTENSION_NAME);
-            host_feature_availability.headless_surface = true;
+            m_feature_availability.headless_surface = true;
         }
 
         if (enable_surfaceless_query) {
             extensions.push_back(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME);
-            host_feature_availability.surfaceless_query = true;
+            m_feature_availability.surfaceless_query = true;
         }
 
         if (supports_synchronization2_layer) {
             layers.push_back("VK_LAYER_KHRONOS_synchronization2");
-            host_feature_availability.sync2_emulation = true;
+            m_feature_availability.sync2_emulation = true;
         }
 
         if (supports_shader_object_layer) {
             layers.push_back("VK_LAYER_KHRONOS_shader_object");
-            host_feature_availability.shader_obj_emulation = true;
+            m_feature_availability.shader_obj_emulation = true;
         }
 
         vk::InstanceCreateFlags instance_create_flags{};
@@ -313,7 +313,7 @@ namespace neuron::occipital {
         if (supports_portability_enum && settings.allow_non_conformant_devices) {
             extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
             instance_create_flags |= vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
-            host_feature_availability.non_conformant_devices = true;
+            m_feature_availability.non_conformant_devices = true;
             std::cout << "Non-conformant device enumeration : " << colored_bool_text(true) << "\n";
         } else {
             std::cout << "Non-conformant device enumeration : " << colored_bool_text(false) << "\n";

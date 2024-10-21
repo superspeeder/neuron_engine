@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 find_package(Vulkan REQUIRED)
 
 add_library(neuron_occipital src/neuron/occipital/occipital.cpp
-        src/neuron/occipital/occipital.hpp)
+        src/neuron/occipital/occipital.hpp
+        src/neuron/occipital/device_context.cpp
+        src/neuron/occipital/device_context.hpp)
 target_include_directories(neuron_occipital PUBLIC src/)
 target_link_libraries(neuron_occipital PUBLIC neuron::stem Vulkan::Vulkan)
 target_compile_definitions(neuron_occipital PUBLIC OCCIPITAL_VERSION="${neuron_occipital_VERSION}" OCCIPITAL_VERSION_MAJOR=${neuron_occipital_VERSION_MAJOR} OCCIPITAL_VERSION_MINOR=${neuron_occipital_VERSION_MINOR} OCCIPITAL_VERSION_PATCH=${neuron_occipital_VERSION_PATCH})

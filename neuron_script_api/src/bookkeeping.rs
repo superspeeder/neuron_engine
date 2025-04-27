@@ -21,11 +21,10 @@ macro_rules! plugin_bookkeeping {
             backend: *mut dyn $crate::backend::ScriptBackend,
         ) -> *mut dyn $crate::bookkeeping::Plugin {
             use std::ops::DerefMut;
-            Clone::clone(PLUGIN.get_or_init(|| {
-                std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new(
-                    $crate::bookkeeping::ScriptBackendRef(&mut *backend),
-                )))
-            })) as *mut dyn $crate::bookkeeping::Plugin
+            let backend_ref = $crate::bookkeeping::ScriptBackendRef(&mut *backend);
+            let plugin_box = std::boxed::Box::new($plugin_type::new(backend_ref));
+            let _ = PLUGIN.set(std::boxed::Box::leak(plugin_box));
+            Clone::clone(PLUGIN.get_or_init(|| unreachable!())) as *mut dyn $crate::bookkeeping::Plugin
         }
 
         #[unsafe(no_mangle)]

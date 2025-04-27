@@ -4,7 +4,9 @@ use std::mem::ManuallyDrop;
 use std::ops::Deref;
 use std::sync::Arc;
 
-pub trait Plugin {}
+pub trait Plugin {
+    fn test_callback(&mut self);
+}
 
 #[repr(transparent)]
 pub struct ScriptBackendRef(pub &'static mut dyn ScriptBackend);

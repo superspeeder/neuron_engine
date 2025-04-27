@@ -24,7 +24,7 @@ macro_rules! plugin_bookkeeping {
             let backend_ref = $crate::bookkeeping::ScriptBackendRef(&mut *backend);
             let plugin_box = std::boxed::Box::new($plugin_type::new(backend_ref));
             let _ = PLUGIN.set(std::boxed::Box::leak(plugin_box));
-            let ptrref = PLUGIN.get_or_init(|| unreachable!())
+            let ptrref = PLUGIN.get_or_init(|| unreachable!());
             let ptr = Clone::clone(ptrref) as *mut dyn $crate::bookkeeping::Plugin;
             ptr
         }

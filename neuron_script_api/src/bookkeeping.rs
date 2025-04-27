@@ -20,7 +20,7 @@ macro_rules! plugin_bookkeeping {
 
         #[unsafe(no_mangle)]
         pub unsafe extern "C" fn _plugin_terminate() {
-            std::mem::ManuallyDrop::drop(&mut PLUGIN);
+            std::mem::ManuallyDrop::drop(PLUGIN.get_mut());
         }
     }
 }

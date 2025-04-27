@@ -21,7 +21,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c3a0cfb-0a3c-4242-a5b9-75e6192d8c0d" name="Changes" comment="Make the basic project skeleton generator work.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/neuron_script_api/src/bookkeeping.rs" beforeDir="false" afterPath="$PROJECT_DIR$/neuron_script_api/src/bookkeeping.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -145,7 +144,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1745719193797</updated>
-      <workItem from="1745719195321" duration="11846000" />
+      <workItem from="1745719195321" duration="11903000" />
     </task>
     <task id="LOCAL-00001" summary="Make the basic project skeleton generator work.">
       <option name="closed" value="true" />

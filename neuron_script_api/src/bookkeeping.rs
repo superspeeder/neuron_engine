@@ -20,11 +20,11 @@ macro_rules! plugin_bookkeeping {
         #[unsafe(no_mangle)]
         pub unsafe extern "stdcall" fn _plugin_init(
             backend: *mut dyn $crate::backend::ScriptBackend,
-        ) -> *mut dyn $crate::bookkeeping::Plugin {
+        ) -> *const std::cell::RefCell<dyn $crate::bookkeeping::Plugin> {
             use std::ops::DerefMut;
             let backend_ref = $crate::bookkeeping::ScriptBackendRef(&mut *backend);
             let mut plugin_box = std::boxed::Box::new(std::cell::RefCell::new($plugin_type::new(backend_ref)));
-            let ptr = plugin_box.as_mut_ptr();
+            let ptr = plugin_box.as_ptr();
             let _ = PLUGIN.set(plugin_box);
             ptr
         }

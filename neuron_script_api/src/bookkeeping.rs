@@ -1,27 +1,41 @@
 use crate::backend::ScriptBackend;
+use parking_lot::RwLock;
 use std::mem::ManuallyDrop;
 use std::ops::Deref;
 use std::sync::Arc;
-use parking_lot::RwLock;
 
-pub trait Plugin {
-}
+pub trait Plugin {}
 
 #[repr(transparent)]
 pub struct ScriptBackendRef(pub &'static mut dyn ScriptBackend);
 
 ///
 /// This creates a static mutable variable called `PLUGIN` which contains an instance of Plugin
+/// Also creates the functions `get_plugin_mut()` and `get_plugin()` which are not marked as unsafe *but* are only safe because all plugin code is called in controlled contexts. Don't call this from anything that might escape those contexts.
 ///
 #[macro_export]
 macro_rules! plugin_bookkeeping {
     ($plugin_type:ident) => {
         static PLUGIN: std::sync::OnceLock<*mut $plugin_type> = std::sync::OnceLock::new();
+
+        pub fn get_plugin_mut() -> &mut $plugin_type {
+            unsafe { &mut **PLUGIN.get().unwrap() }
+        }
+
+        pub fn get_plugin() -> &$plugin_type {
+            unsafe { &**PLUGIN.get().unwrap() }
+        }
+
         #[unsafe(no_mangle)]
-        pub unsafe extern "C" fn _plugin_init(backend: *mut dyn $crate::backend::ScriptBackend) -> *mut dyn $crate::bookkeeping::Plugin {
+        pub unsafe extern "C" fn _plugin_init(
+            backend: *mut dyn $crate::backend::ScriptBackend,
+        ) -> *mut dyn $crate::bookkeeping::Plugin {
             use std::ops::DerefMut;
-            *PLUGIN.get_or_init(|| std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new($crate::bookkeeping::ScriptBackendRef(&mut *backend)))))
-                as *mut dyn $crate::bookkeeping::Plugin
+            *PLUGIN.get_or_init(|| {
+                std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new(
+                    $crate::bookkeeping::ScriptBackendRef(&mut *backend),
+                )))
+            }) as *mut dyn $crate::bookkeeping::Plugin
         }
 
         #[unsafe(no_mangle)]
@@ -30,5 +44,5 @@ macro_rules! plugin_bookkeeping {
                 std::mem::drop(std::boxed::Box::from_raw(plug as *mut $plugin_type)); // rebox the memory and immediately drop it
             };
         }
-    }
+    };
 }

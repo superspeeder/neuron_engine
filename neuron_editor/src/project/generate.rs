@@ -61,10 +61,9 @@ pub fn generate_project_skeleton(directory: impl AsRef<Path>, manifest: ProjectM
     std::fs::write(path.join(".gitignore"), include_str!("../../template/template.gitignore"))?;
     generate_build_project(path, &manifest.build)?;
 
-
     Ok(())
 }
 
 fn generate_script_main(manifest: &ProjectManifest) -> String {
-    format!(include_str!("../../template/script_main.rs"))
+    include_str!("../../template/script_main.rs").to_string()
 }

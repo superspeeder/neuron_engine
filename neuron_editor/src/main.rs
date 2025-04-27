@@ -23,7 +23,7 @@ fn main() -> Result<(), EditorError> {
     let manifest = ProjectManifest {
         name: "Test Project".to_string(),
         build: BuildsystemConfiguration {
-            name: "test-project".to_string(),
+            name: "test_project".to_string(),
             ..Default::default()
         },
     };

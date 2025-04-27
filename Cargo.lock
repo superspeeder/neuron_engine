@@ -1001,6 +1001,9 @@ dependencies = [
 [[package]]
 name = "neuron_script_api"
 version = "0.1.0"
+dependencies = [
+ "log",
+]
 
 [[package]]
 name = "num-traits"

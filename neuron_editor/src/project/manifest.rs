@@ -5,3 +5,4 @@ pub struct ProjectManifest {
     pub name: String,
     pub build: BuildsystemConfiguration,
 }
+

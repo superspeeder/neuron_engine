@@ -1,7 +1,0 @@
-[package]
-name = "{name}"
-path = "../scripts/script_main.rs"
-crate_type = "cdylib"
-
-[dependencies]
-neuron_script_api = {{ git = "{api_git_repo}", tag = "{api_git_tag}" }}

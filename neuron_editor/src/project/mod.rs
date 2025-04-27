@@ -1,3 +1,3 @@
-mod manifest;
-mod buildsystem;
-mod generate;
+pub mod manifest;
+pub mod buildsystem;
+pub mod generate;

@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/neuron_script_api/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/neuron_editor/target" />
+      <excludeFolder url="file://$MODULE_DIR$/run" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -1,7 +1,6 @@
 use crate::backend::ScriptBackend;
 
 pub trait Plugin {
-    fn terminate(&mut self);
 }
 
 #[repr(transparent)]
@@ -13,15 +12,15 @@ pub struct ScriptBackendRef(pub &'static mut dyn ScriptBackend);
 #[macro_export]
 macro_rules! plugin_bookkeeping {
     ($plugin_type:ident) => {
-        static mut PLUGIN: std::sync::Once<std::mem::ManuallyDrop<$plugin_type>> = std::sync::Once::new();
+        static mut PLUGIN: std::sync::OnceLock<std::mem::ManuallyDrop<$plugin_type>> = std::sync::OnceLock::new();
         #[unsafe(no_mangle)]
         pub unsafe extern "C" fn _plugin_init(backend: *mut dyn $crate::backend::ScriptBackend) -> *mut dyn $crate::bookkeeping::Plugin {
-            PLUGIN.call_once(|| std::mem::ManuallyDrop::new($plugin_type::new($crate::bookkeeping::ScriptBackendRef(unsafe { &mut *backend }))));
+            PLUGIN.set(std::mem::ManuallyDrop::new($plugin_type::new($crate::bookkeeping::ScriptBackendRef(unsafe { &mut *backend }))));
         }
 
         #[unsafe(no_mangle)]
         pub unsafe extern "C" fn _plugin_terminate() {
-            PLUGIN.terminate();
+            std::mem::ManuallyDrop::drop(&mut PLUGIN);
         }
     }
 }

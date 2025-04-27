@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
+      <package file="$PROJECT_DIR$/neuron_editor">
+        <enabledFeature name="default" />
+      </package>
+      <package file="$PROJECT_DIR$">
+        <enabledFeature name="default" />
+      </package>
+      <package file="$PROJECT_DIR$/neuron_runtime">
+        <enabledFeature name="default" />
+      </package>
+      <package file="$PROJECT_DIR$/neuron_script_api">
+        <enabledFeature name="default" />
+      </package>
+    </cargoProject>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7c3a0cfb-0a3c-4242-a5b9-75e6192d8c0d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/neuron_engine.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/Cargo.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/src/main.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/src/project/Cargo-template.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/src/project/buildsystem.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/src/project/generate.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/src/project/manifest.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/src/project/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/.rustc_info.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/CACHEDIR.TAG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.cargo-lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-63a54b09a58d5ffe/dep-test-bin-neuron_editor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-63a54b09a58d5ffe/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-63a54b09a58d5ffe/test-bin-neuron_editor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-63a54b09a58d5ffe/test-bin-neuron_editor.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-f67189771728c943/bin-neuron_editor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-f67189771728c943/bin-neuron_editor.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-f67189771728c943/dep-bin-neuron_editor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/.fingerprint/neuron_editor-f67189771728c943/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/deps/libneuron_editor-63a54b09a58d5ffe.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/deps/libneuron_editor-f67189771728c943.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/deps/neuron_editor-63a54b09a58d5ffe.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/deps/neuron_editor-f67189771728c943.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-1g60co6yhzeep/s-h6t0c0xbtd-0b6gjca-c2hx76yv39lbic812yirgxgl9/dep-graph.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-1g60co6yhzeep/s-h6t0c0xbtd-0b6gjca-c2hx76yv39lbic812yirgxgl9/query-cache.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-1g60co6yhzeep/s-h6t0c0xbtd-0b6gjca-c2hx76yv39lbic812yirgxgl9/work-products.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-1g60co6yhzeep/s-h6t0c0xbtd-0b6gjca.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-2aekhhy32sy7s/s-h6t0c0xbx7-0do16gi-058pproqc2nyeko6nk0ul0re9/dep-graph.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-2aekhhy32sy7s/s-h6t0c0xbx7-0do16gi-058pproqc2nyeko6nk0ul0re9/query-cache.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-2aekhhy32sy7s/s-h6t0c0xbx7-0do16gi-058pproqc2nyeko6nk0ul0re9/work-products.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_editor/target/debug/incremental/neuron_editor-2aekhhy32sy7s/s-h6t0c0xbx7-0do16gi.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_runtime/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_runtime/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_runtime/src/main.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_script_api/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_script_api/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/neuron_script_api/src/lib.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/config.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/state.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/window.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/package/manifest.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/package/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/render/mod.rs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="gPtfzeql" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2wIBQmrBoRFfpkhXGXbw9wnRUDk" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Cargo.Run neuron_editor.executor": "Run",
+    "Cargo.Test.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/andy/RustroverProjects/neuron_engine/src/render",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.first.attach.projects": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\andy\RustroverProjects\neuron_engine\src\render" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Run neuron_editor" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="buildProfileId" value="dev" />
+      <option name="command" value="run --package neuron_editor --bin neuron_editor" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs>
+        <env name="RUST_LOG" value="debug" />
+      </envs>
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7c3a0cfb-0a3c-4242-a5b9-75e6192d8c0d" name="Changes" comment="" />
+      <created>1745719193797</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745719193797</updated>
+      <workItem from="1745719195321" duration="7820000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

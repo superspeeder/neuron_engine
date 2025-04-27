@@ -1,0 +1,25 @@
+[workspace]
+members = ["neuron_editor", "neuron_runtime", "neuron_script_api"]
+
+[package]
+name = "neuron_engine"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+wgpu = "25.0.0"
+winit = "0.30.9"
+serde = { version = "1.0.219", features = ["derive", "alloc"] }
+serde_json = "1.0.140"
+toml = "0.8.21"
+log = "0.4.27"
+rand = "0.9.1"
+thiserror = "2.0.12"
+once_cell = "1.21.3"
+uuid = "1.16.0"
+bytemuck = "1.22.0"
+cgmath = "0.18.0"
+mint = "0.5.9"
+pollster = "0.4.0"
+hashbrown = "0.15.2"
+parking_lot = "0.12.3"

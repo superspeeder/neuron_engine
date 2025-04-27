@@ -24,7 +24,7 @@ macro_rules! plugin_bookkeeping {
             use std::ops::DerefMut;
             let backend_ref = $crate::bookkeeping::ScriptBackendRef(&mut *backend);
             let mut plugin_box = std::boxed::Box::new(std::cell::RefCell::new($plugin_type::new(backend_ref)));
-            let ptr = std::boxed::Box::as_mut_ptr();
+            let ptr = plugin_box.as_mut_ptr();
             let _ = PLUGIN.set(plugin_box);
             ptr
         }

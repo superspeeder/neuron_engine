@@ -16,7 +16,7 @@ pub struct ScriptBackendRef(pub &'static mut dyn ScriptBackend);
 #[macro_export]
 macro_rules! plugin_bookkeeping {
     ($plugin_type:ident) => {
-        static mut PLUGIN: std::sync::OnceLock<*mut $plugin_type> = std::sync::OnceLock::new();
+        static PLUGIN: std::sync::OnceLock<*mut $plugin_type> = std::sync::OnceLock::new();
         #[unsafe(no_mangle)]
         pub unsafe extern "C" fn _plugin_init(backend: *mut dyn $crate::backend::ScriptBackend) -> *mut dyn $crate::bookkeeping::Plugin {
             use std::ops::DerefMut;

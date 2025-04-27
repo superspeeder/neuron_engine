@@ -18,11 +18,11 @@ macro_rules! plugin_bookkeeping {
     ($plugin_type:ident) => {
         static PLUGIN: std::sync::OnceLock<*mut $plugin_type> = std::sync::OnceLock::new();
 
-        pub fn get_plugin_mut() -> &mut $plugin_type {
+        pub fn get_plugin_mut() -> &'static mut $plugin_type {
             unsafe { &mut **PLUGIN.get().unwrap() }
         }
 
-        pub fn get_plugin() -> &$plugin_type {
+        pub fn get_plugin() -> &'static $plugin_type {
             unsafe { &**PLUGIN.get().unwrap() }
         }
 

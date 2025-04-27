@@ -25,7 +25,7 @@ macro_rules! plugin_bookkeeping {
                 std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new(
                     $crate::bookkeeping::ScriptBackendRef(&mut *backend),
                 )))
-            }).cast() as *mut dyn $crate::bookkeeping::Plugin
+            }) as *mut dyn $crate::bookkeeping::Plugin
         }
 
         #[unsafe(no_mangle)]

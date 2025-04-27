@@ -17,7 +17,7 @@ macro_rules! plugin_bookkeeping {
         static mut PLUGIN: std::sync::OnceLock<*mut $plugin_type> = std::sync::OnceLock::new();
 
         #[unsafe(no_mangle)]
-        pub unsafe extern "C" fn _plugin_init(
+        pub unsafe extern "stdcall" fn _plugin_init(
             backend: *mut dyn $crate::backend::ScriptBackend,
         ) -> *mut dyn $crate::bookkeeping::Plugin {
             use std::ops::DerefMut;
@@ -29,7 +29,7 @@ macro_rules! plugin_bookkeeping {
         }
 
         #[unsafe(no_mangle)]
-        pub unsafe extern "C" fn _plugin_terminate() {
+        pub unsafe extern "stdcall" fn _plugin_terminate() {
             if let Some(&plug) = PLUGIN.get() {
                 std::mem::drop(std::boxed::Box::from_raw(plug as *mut $plugin_type)); // rebox the memory and immediately drop it
             };

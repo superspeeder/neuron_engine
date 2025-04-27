@@ -15,6 +15,7 @@ macro_rules! plugin_bookkeeping {
         static mut PLUGIN: std::sync::OnceLock<std::mem::ManuallyDrop<$plugin_type>> = std::sync::OnceLock::new();
         #[unsafe(no_mangle)]
         pub unsafe extern "C" fn _plugin_init(backend: *mut dyn $crate::backend::ScriptBackend) -> *mut dyn $crate::bookkeeping::Plugin {
+            use std::ops::DerefMut;
             PLUGIN.get_mut_or_init(||std::mem::ManuallyDrop::new($plugin_type::new($crate::bookkeeping::ScriptBackendRef(unsafe { &mut *backend })))).deref_mut() as *mut $plugin_type as *mut dyn $crate::bookkeeping::Plugin
         }
 

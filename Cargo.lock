@@ -990,10 +990,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "neuron_sandbox"
+name = "neuron_runtime"
 version = "0.1.0"
 dependencies = [
  "env_logger",
+ "libloading",
  "neuron_engine",
  "neuron_script_api",
 ]
@@ -1003,7 +1004,6 @@ name = "neuron_script_api"
 version = "0.1.0"
 dependencies = [
  "log",
- "parking_lot",
 ]
 
 [[package]]

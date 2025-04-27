@@ -1,8 +1,4 @@
 use crate::backend::ScriptBackend;
-use parking_lot::RwLock;
-use std::mem::ManuallyDrop;
-use std::ops::Deref;
-use std::sync::Arc;
 
 pub trait Plugin {
     fn test_callback(&mut self);
@@ -25,11 +21,11 @@ macro_rules! plugin_bookkeeping {
             backend: *mut dyn $crate::backend::ScriptBackend,
         ) -> *mut dyn $crate::bookkeeping::Plugin {
             use std::ops::DerefMut;
-            *PLUGIN.get_or_init(|| {
+            PLUGIN.get_or_init(|| {
                 std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new(
                     $crate::bookkeeping::ScriptBackendRef(&mut *backend),
                 )))
-            }) as *mut dyn $crate::bookkeeping::Plugin
+            }).cast() as *mut dyn $crate::bookkeeping::Plugin
         }
 
         #[unsafe(no_mangle)]

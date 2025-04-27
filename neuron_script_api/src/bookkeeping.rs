@@ -31,7 +31,7 @@ macro_rules! plugin_bookkeeping {
 
         #[unsafe(no_mangle)]
         pub unsafe extern "stdcall" fn _plugin_terminate() {
-            if let Some(&plug) = PLUGIN.get() {
+            if let Some(plug) = PLUGIN.get() {
                 plug.borrow_mut().terminate();
             };
         }

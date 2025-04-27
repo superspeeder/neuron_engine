@@ -20,7 +20,7 @@ macro_rules! plugin_bookkeeping {
         #[unsafe(no_mangle)]
         pub unsafe extern "C" fn _plugin_init(backend: *mut dyn $crate::backend::ScriptBackend) -> *mut dyn $crate::bookkeeping::Plugin {
             use std::ops::DerefMut;
-            *PLUGIN.get_or_init(|| std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new($crate::bookkeeping::ScriptBackendRef(backend)))))
+            *PLUGIN.get_or_init(|| std::boxed::Box::leak(std::boxed::Box::new($plugin_type::new($crate::bookkeeping::ScriptBackendRef(&mut *backend)))))
                 as *mut dyn $crate::bookkeeping::Plugin
         }
 
